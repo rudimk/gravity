@@ -1234,12 +1234,14 @@ func (p *Process) initService(ctx context.Context) (err error) {
 	}
 
 	p.handlers.Operator, err = opshandler.NewWebHandler(opshandler.WebHandlerConfig{
-		Users:         p.identity,
-		Operator:      p.operator,
-		Applications:  applications,
-		Packages:      p.packages,
-		Authenticator: p.handlers.WebProxy.GetHandler().AuthenticateRequest,
-		Backend:       p.backend,
+		Users:               p.identity,
+		Operator:            p.operator,
+		Applications:        applications,
+		Packages:            p.packages,
+		Authenticator:       p.handlers.WebProxy.GetHandler().AuthenticateRequest,
+		Backend:             p.backend,
+		PublicAdvertiseAddr: p.cfg.Pack.GetPublicAddr(),
+		EventBroadcaster:    p,
 	})
 	if err != nil {
 		return trace.Wrap(err)
