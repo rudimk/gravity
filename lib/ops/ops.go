@@ -1459,6 +1459,8 @@ type NewAPIKeyRequest struct {
 type NewInstallTokenRequest struct {
 	// AccountID links this token to the specified account
 	AccountID string `json:"account"`
+	// ClusterName specifies the name of the cluster this token is for
+	ClusterName string `json:"cluster_name"`
 	// Application references an optional application package to associate
 	// with the install token
 	Application string `json:"app"`
@@ -1475,6 +1477,9 @@ type NewInstallTokenRequest struct {
 func (r NewInstallTokenRequest) Check() error {
 	if r.AccountID == "" {
 		return trace.BadParameter("missing parameter AccountID")
+	}
+	if r.ClusterName == "" {
+		return trace.BadParameter("missing parameter ClusterName")
 	}
 	if r.UserType == "" {
 		return trace.BadParameter("missing parameter UserType")
