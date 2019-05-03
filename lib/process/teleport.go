@@ -22,6 +22,7 @@ import (
 	"github.com/gravitational/gravity/lib/processconfig"
 	"github.com/gravitational/gravity/lib/storage"
 
+	"github.com/gravitational/teleport/lib/client"
 	"github.com/gravitational/teleport/lib/config"
 	"github.com/gravitational/teleport/lib/service"
 
@@ -138,4 +139,20 @@ func (p *Process) getAuthGatewayConfig() (storage.AuthGateway, error) {
 		return nil, trace.Wrap(err)
 	}
 	return opsservice.GetAuthGateway(client, p.identity)
+}
+
+// proxySettings returns Teleport proxy settings based on the Teleport config.
+func (p *Process) proxySettings() client.ProxySettings {
+	settings := client.ProxySettings{
+		Kube: client.KubeProxySettings{
+			Enabled: p.teleportConfig.Proxy.Kube.Enabled,
+		},
+		SSH: client.SSHProxySettings{
+			ListenAddr: p.teleportConfig.Proxy.SSHAddr.String(),
+		},
+	}
+	if len(p.teleportConfig.Proxy.Kube.PublicAddrs) > 0 {
+		settings.Kube.PublicAddr = p.teleportConfig.Proxy.Kube.PublicAddrs[0].String()
+	}
+	return settings
 }
