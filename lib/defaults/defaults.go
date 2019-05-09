@@ -1131,6 +1131,9 @@ var (
 		"hmac-sha2-256-etm@openssh.com",
 		"hmac-sha2-256",
 	}
+
+	// AbortedOperationExitCode specifies the exit code for this process when an operation is aborted
+	AbortedOperationExitCode = 254
 )
 
 // HookSecurityContext returns default securityContext for hook pods
